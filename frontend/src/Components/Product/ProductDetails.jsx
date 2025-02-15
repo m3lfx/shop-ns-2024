@@ -8,10 +8,14 @@ import { getUser, getToken, successMsg, errMsg } from '../../utils/helpers'
 import ListReviews from '../Review/ListReviews';
 
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { getProductDetails, clearErrors, } from '../../actions/productActions'
 
 const ProductDetails = ({ cartItems, addItemToCart }) => {
-    const [product, setProduct] = useState({})
-    const [error, setError] = useState('')
+    const dispatch = useDispatch();
+    const { loading, error, product } = useSelector(state => state.productDetails);
+    // const [product, setProduct] = useState({})
+    // const [error, setError] = useState('')
     const [quantity, setQuantity] = useState(1)
     const [user, setUser] = useState(getUser())
     const [rating, setRating] = useState(0)
@@ -35,20 +39,20 @@ const ProductDetails = ({ cartItems, addItemToCart }) => {
         const qty = count.valueAsNumber - 1;
         setQuantity(qty)
     }
-    const productDetails = async (id) => {
-        let link = `http://localhost:4001/api/v1/product/${id}`
-        try {
-            let res = await axios.get(link)
-            setProduct(res.data.product)
+    // const productDetails = async (id) => {
+    //     let link = `http://localhost:4001/api/v1/product/${id}`
+    //     try {
+    //         let res = await axios.get(link)
+    //         setProduct(res.data.product)
 
 
-        } catch (err) {
-            console.log(err)
-            setError('Product not found')
+    //     } catch (err) {
+    //         console.log(err)
+    //         setError('Product not found')
 
 
-        }
-    }
+    //     }
+    // }
 
 
 
@@ -116,21 +120,20 @@ const ProductDetails = ({ cartItems, addItemToCart }) => {
 
 
     useEffect(() => {
-        productDetails(id)
+        dispatch(getProductDetails(id))
         if (error) {
-            navigate('/')
-            setError('')
+            // notify(error)
+            dispatch(clearErrors())
         }
         if (errorReview) {
-            errMsg(errorReview)
-            setErrorReview('')
+            dispatch(clearErrors())
         }
         if (success) {
             successMsg('Review posted successfully')
             setSuccess(false)
 
         }
-    }, [id, error, success, errorReview]);
+    }, [id, error, success, errorReview, dispatch, navigate]);
     localStorage.setItem('cartItems', JSON.stringify(cartItems))
     return (
         <>
