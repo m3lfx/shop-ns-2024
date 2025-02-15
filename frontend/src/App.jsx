@@ -34,7 +34,8 @@ import ProtectedRoute from './Components/Route/ProtectedRoute';
 import Dashboard from './Components/Admin/Dashboard';
 import ProductReviews from './Components/Admin/ProcessReview';
 import axios from 'axios';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUser } from './actions/userActions';
 // import { getToken, onMessage } from "firebase/messaging";
 // import { messaging } from "./config/firebase";
 
@@ -44,7 +45,8 @@ import axios from 'axios';
 
 function App() {
   // const { VITE_APP_VAPID_KEY } = import.meta.env;
-
+const dispatch = useDispatch()
+const { user, isAuthenticated, loading } = useSelector(state => state.auth)
   const [state, setState] = useState({
     cartItems: localStorage.getItem('cartItems')
       ? JSON.parse(localStorage.getItem('cartItems'))
@@ -140,12 +142,14 @@ function App() {
   // useEffect(() => {
   //   requestPermission();
   // }, []);
-
+  useEffect(() => {
+    dispatch(loadUser())
+  }, [])
   return (
     <>
 
       <Router>
-        <Header cartItems={state.cartItems} />
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} exact="true" />
           <Route path="/product/:id" element={<ProductDetails  addItemToCart={addItemToCart} />} exact="true" />
@@ -154,7 +158,14 @@ function App() {
           <Route path="/register" element={<Register exact="true" />} />
           <Route path="/password/forgot" element={<ForgotPassword />} exact="true" />
           <Route path="/password/reset/:token" element={<NewPassword />} exact="true" />
-          <Route path="/me" element={<Profile />} exact="true" />
+          {/* <Route path="/me" element={<Profile />} exact="true" /> */}
+          <Route path="/me" element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+          exact="true"
+        />
           <Route path="/me/update"
             element={<UpdateProfile />
             }

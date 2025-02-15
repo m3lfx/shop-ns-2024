@@ -5,10 +5,16 @@ import Search from './Search'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux'
 
-import { getUser, logout } from '../../utils/helpers'
-const Header = ({ cartItems }) => {
-    const [user, setUser] = useState({})
+import { logout } from '../../actions/userActions'
+
+// import { getUser, logout } from '../../utils/helpers'
+const Header = () => {
+    const dispatch = useDispatch();
+	const { user, loading } = useSelector(state => state.auth)
+    // const { cartItems } = useSelector(state => state.cart)
+    // const [user, setUser] = useState({})
     const navigate = useNavigate()
 
     // const logoutUser = async () => {
@@ -24,15 +30,16 @@ const Header = ({ cartItems }) => {
     // }
 
     const logoutHandler = () => {
-        logout(navigate('/'));
+        // logout(navigate('/'));
+        dispatch(logout())
         toast.success('log out', {
             position: 'bottom-right'
         });
     }
 
-    useEffect(() => {
-        setUser(getUser())
-    }, []);
+    // useEffect(() => {
+    //     setUser(getUser())
+    // }, []);
     return (
         <>
             <nav className="navbar row">
@@ -80,7 +87,7 @@ const Header = ({ cartItems }) => {
 
                         {/*<span className="ml-1" id="cart_count">2</span>*/}
                     </Link>
-                    <span className="ml-1" id="cart_count">{cartItems.length}</span>
+                    {/* <span className="ml-1" id="cart_count">{cartItems ? cartItems.length : null}</span> */}
                 </div>
             </nav>
         </>

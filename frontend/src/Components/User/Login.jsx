@@ -6,15 +6,18 @@ import MetaData from '../Layout/MetaData';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import {authenticate, getUser} from '../../utils/helpers'
+// import {authenticate, getUser} from '../../utils/helpers'
+import { useDispatch, useSelector } from 'react-redux'
+import { login, clearErrors } from '../../actions/userActions'
 
 
 
 const Login = () => {
-
+    const dispatch = useDispatch();
+    const { isAuthenticated, error, loading } = useSelector(state => state.auth);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
     
     let location = useLocation()
     const navigate = useNavigate()
@@ -25,33 +28,46 @@ const Login = () => {
     //     position: toast.POSITION.BOTTOM_RIGHT
     // });
 
-    const login = async (email, password) => {
-        try {
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-            const { data } = await axios.post(`http://localhost:4001/api/v1/login`, { email, password }, config)
-            console.log(data)
-            authenticate(data, () => navigate("/"))
+    // const login = async (email, password) => {
+    //     try {
+    //         const config = {
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             }
+    //         }
+    //         const { data } = await axios.post(`http://localhost:4001/api/v1/login`, { email, password }, config)
+    //         console.log(data)
+    //         authenticate(data, () => navigate("/"))
             
-        } catch (error) {
-            toast.error("invalid user or password", {
-                position: 'bottom-right'
-            })
-        }
-    }
+    //     } catch (error) {
+    //         toast.error("invalid user or password", {
+    //             position: 'bottom-right'
+    //         })
+    //     }
+    // }
     const submitHandler = (e) => {
         e.preventDefault();
-        login(email, password)
+        dispatch(login(email, password))
     }
+    // useEffect(() => {
+    //     if (getUser() && redirect === 'shipping' ) {
+    //          navigate(`/${redirect}`)
+    //     }
+    // }, [])
     useEffect(() => {
-        if (getUser() && redirect === 'shipping' ) {
-             navigate(`/${redirect}`)
+        if (isAuthenticated && redirect === 'shipping') {
+            navigate(`/${redirect}`, { replace: true })
         }
-    }, [])
+        else if (isAuthenticated)
+            navigate('/')
+        if (error) {
+            // alert.error(error);
+            console.log(error)
+            // notify(error)
+            dispatch(clearErrors());
+        }
 
+    }, [dispatch, isAuthenticated, error, navigate, redirect])
     return (
         <>
             {loading ? <Loader /> : (
@@ -103,7 +119,7 @@ const Login = () => {
 
 
                 </>
-            )}
+            )} 
         </>
     )
 }

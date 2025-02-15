@@ -21,7 +21,9 @@ let initialState = {
         shippingInfo: localStorage.getItem('shippingInfo')
             ? JSON.parse(localStorage.getItem('shippingInfo'))
             : {}
-    }
+    },
+    user: {},
+    auth: {},
 }
 const middleware = [thunk]
 const store = createStore(reducer, initialState, composeWithDevTools(applyMiddleware(...middleware)))
