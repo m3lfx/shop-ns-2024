@@ -11,13 +11,13 @@ const { registerUser,
     allUsers,
     getUserDetails,
     updateUser,
-    sendMessage
+    // sendMessage
 
  } = require('../controllers/auth');
 const { isAuthenticatedUser,  authorizeRoles } = require('../middlewares/auth');
 router.post('/register', upload.single("avatar"), registerUser);
 
-router.get('/send', sendMessage );
+// router.get('/send', sendMessage );
 
 router.post('/password/forgot', forgotPassword);
 router.put('/password/reset/:token', resetPassword);

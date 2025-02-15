@@ -7,35 +7,35 @@ const admin = require("firebase-admin");
 const sendToken = require('../utils/jwtToken')
 const sendEmail = require('../utils/sendEmail')
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: ""
-});
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+//     databaseURL: ""
+// });
 
 
-exports.sendMessage = async (req, res, next) => {
+// exports.sendMessage = async (req, res, next) => {
     
-    // const topic = 'general';
+//     // const topic = 'general';
    
-    const message = {
-        notification: {
-            title: 'Message from node',
-            body: 'hey there',
-            imageUrl: 'https://res.cloudinary.com/dgneiaky7/image/upload/v1728010631/products/pstnuskit4hycbl81dlb.png'
-        },
-        // topic
-        token: '',
-    };
-    try {
-        response = await admin.messaging().send(message)
-        console.log('Node oct 30:', response);
-        return res.status(200).json({ message: 'success sent message', response })
-    } catch (error) {
-        console.log('Error sending message:', error);
-        return res.status(200).json({ message: error })
+//     const message = {
+//         notification: {
+//             title: 'Message from node',
+//             body: 'hey there',
+//             imageUrl: 'https://res.cloudinary.com/dgneiaky7/image/upload/v1728010631/products/pstnuskit4hycbl81dlb.png'
+//         },
+//         // topic
+//         token: '',
+//     };
+//     try {
+//         response = await admin.messaging().send(message)
+//         console.log('Node oct 30:', response);
+//         return res.status(200).json({ message: 'success sent message', response })
+//     } catch (error) {
+//         console.log('Error sending message:', error);
+//         return res.status(200).json({ message: error })
 
-    }
- }
+//     }
+//  }
 
 
 exports.registerUser = async (req, res, next) => {
