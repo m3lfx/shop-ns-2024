@@ -1,50 +1,56 @@
-import  { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import MetaData from '../Layout/MetaData'
 import Loader from '../Layout/Loader'
-import axios from 'axios'
+// import axios from 'axios'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux'
 
-import { getToken } from '../../utils/helpers'
+import { getOrderDetails, clearErrors } from '../../actions/orderActions'
+
+
+// import { getToken } from '../../utils/helpers'
 
 const OrderDetails = () => {
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState('')
-    const [order, setOrder] = useState({})
+    const dispatch = useDispatch();
+    const { loading, error, order = {} } = useSelector(state => state.orderDetails)
 
     const { shippingInfo, orderItems, paymentInfo, user, totalPrice, orderStatus } = order
+    // const [loading, setLoading] = useState(true)
+    // const [error, setError] = useState('')
+    // const [order, setOrder] = useState({})
     let { id } = useParams();
 
-    const getOrderDetails = async (id) => {
-        try {
+    // const getOrderDetails = async (id) => {
+    //     try {
 
-            const config = {
-                headers: {
-                    'Authorization': `Bearer ${getToken()}`
-                }
-            }
+    //         const config = {
+    //             headers: {
+    //                 'Authorization': `Bearer ${getToken()}`
+    //             }
+    //         }
 
-            const { data } = await axios.get(`${import.meta.env.VITE_API}/order/${id}`, config)
-            setOrder(data.order)
-            setLoading(false)
+    //         const { data } = await axios.get(`${import.meta.env.VITE_API}/order/${id}`, config)
+    //         setOrder(data.order)
+    //         setLoading(false)
 
 
-        } catch (error) {
-            setError(error.response.data.message)
-        }
-    }
+    //     } catch (error) {
+    //         setError(error.response.data.message)
+    //     }
+    // }
 
     useEffect(() => {
-        getOrderDetails(id)
+        dispatch(getOrderDetails(id))
 
         if (error) {
             toast.error(error, {
                 position: 'bottom-right'
             });
         }
-    }, [error, id])
+    }, [error, id, dispatch])
 
     const shippingDetails = shippingInfo && `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.postalCode}, ${shippingInfo.country}`
 
