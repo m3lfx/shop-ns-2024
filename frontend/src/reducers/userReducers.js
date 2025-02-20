@@ -129,24 +129,15 @@ export const userReducer = (state = {}, action) => {
                 error: action.payload
             }
         case DELETE_USER_SUCCESS:
-
             return {
-
                 ...state,
-
                 loading: false,
-
                 isDeleted: action.payload
-
             }
         case DELETE_USER_RESET:
-
             return {
-
                 ...state,
-
                 isDeleted: false
-
             }
         case CLEAR_ERRORS:
             return {
@@ -157,3 +148,4 @@ export const userReducer = (state = {}, action) => {
             return state;
     }
 }
+
