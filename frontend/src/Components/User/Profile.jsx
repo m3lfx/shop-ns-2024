@@ -7,37 +7,39 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getToken } from '../../utils/helpers';
-
+import { useSelector } from 'react-redux'
+// import { loadUser } from '../../actions/userActions';
 const Profile = () => {
-    const [loading, setLoading] = useState(true)
-    const [user, setUser] = useState('')
+    const { user, loading } = useSelector(state => state.auth)
+    // const [loading, setLoading] = useState(true)
+    // const [user, setUser] = useState('')
     
 
-    const getProfile = async () => {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${getToken()}`
-            }
-        }
-        try {
-            const { data } = await axios.get(`http://localhost:4001/api/v1/me`, config)
-            console.log(data.user)
-            setUser(data.user)
-            setLoading(false)
-        } catch (error) {
-            console.log(error)
-            toast.error("invalid user or password", {
-                position: 'bottom-center'
-            })
-        }
+    // const getProfile = async () => {
+    //     const config = {
+    //         headers: {
+    //             'Authorization': `Bearer ${getToken()}`
+    //         }
+    //     }
+    //     try {
+    //         const { data } = await axios.get(`http://localhost:4001/api/v1/me`, config)
+    //         console.log(data.user)
+    //         setUser(data.user)
+    //         setLoading(false)
+    //     } catch (error) {
+    //         console.log(error)
+    //         toast.error("invalid user or password", {
+    //             position: 'bottom-center'
+    //         })
+    //     }
 
-    }
+    // }
     
-    useEffect(() => {
+    // useEffect(() => {
         
-        getProfile()
+    //     getProfile()
 
-    }, [])
+    // }, [])
     return (
         <>
             {/* {loading ? <Loader /> : ( */}
