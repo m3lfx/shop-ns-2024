@@ -11,12 +11,15 @@ import {
     userReducer,
     forgotPasswordReducer,
 } from './reducers/userReducers';
+
+import { cartReducer } from './reducers/cartReducers';
 const reducer = combineReducers({
     products: productsReducer,
     productDetails: productDetailsReducer,
     auth: authReducer,
     user: userReducer,
     forgotPassword: forgotPasswordReducer,
+    cart: cartReducer,
 
 })
 

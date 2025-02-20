@@ -10,14 +10,15 @@ import ListReviews from '../Review/ListReviews';
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProductDetails, clearErrors, } from '../../actions/productActions'
-
-const ProductDetails = ({ cartItems, addItemToCart }) => {
+import { addItemToCart } from '../../actions/cartActions'
+const ProductDetails = () => {
     const dispatch = useDispatch();
     const { loading, error, product } = useSelector(state => state.productDetails);
+    const { user } = useSelector(state => state.auth)
     // const [product, setProduct] = useState({})
     // const [error, setError] = useState('')
     const [quantity, setQuantity] = useState(1)
-    const [user, setUser] = useState(getUser())
+    // const [user, setUser] = useState(getUser())
     const [rating, setRating] = useState(0)
     const [comment, setComment] = useState('')
     const [errorReview, setErrorReview] = useState('');
@@ -57,7 +58,7 @@ const ProductDetails = ({ cartItems, addItemToCart }) => {
 
 
     const addToCart = async () => {
-        await addItemToCart(id, quantity);
+        dispatch(addItemToCart(id, quantity));
 
     }
     function setUserRatings() {
@@ -134,7 +135,7 @@ const ProductDetails = ({ cartItems, addItemToCart }) => {
 
         }
     }, [id, error, success, errorReview, dispatch, navigate]);
-    localStorage.setItem('cartItems', JSON.stringify(cartItems))
+    // localStorage.setItem('cartItems', JSON.stringify(cartItems))
     return (
         <>
             <MetaData title={product.name} />
