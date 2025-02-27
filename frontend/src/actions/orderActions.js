@@ -87,7 +87,7 @@ export const allOrders = () => async (dispatch) => {
 
     try {
         dispatch({ type: ALL_ORDERS_REQUEST });
-        const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/admin/orders`, {
+        const { data } = await axios.get(`${import.meta.env.VITE_API}/admin/orders`, {
             //AxiosRequestConfig parameter
             withCredentials: true //correct
         })
@@ -112,7 +112,7 @@ export const updateOrder = (id, orderData) => async (dispatch) => {
             },
             withCredentials: true
         }
-        const { data } = await axios.put(`${process.env.REACT_APP_API}/api/v1/admin/order/${id}`, orderData, config)
+        const { data } = await axios.put(`${import.meta.env.VITE_API}/admin/order/${id}`, orderData, config)
         dispatch({
             type: UPDATE_ORDER_SUCCESS,
             payload: data.success
@@ -129,7 +129,7 @@ export const updateOrder = (id, orderData) => async (dispatch) => {
 export const deleteOrder = (id) => async (dispatch) => {
     try {
         dispatch({ type: DELETE_ORDER_REQUEST })
-        const { data } = await axios.delete(`${process.env.REACT_APP_API}/api/v1/admin/order/${id}`, { withCredentials: true })
+        const { data } = await axios.delete(`${import.meta.env.VITE_API}/admin/order/${id}`, { withCredentials: true })
         dispatch({
             type: DELETE_ORDER_SUCCESS,
             payload: data.success
