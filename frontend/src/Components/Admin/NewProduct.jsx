@@ -6,9 +6,15 @@ import { getToken } from '../../utils/helpers';
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux'
+
+import { newProduct, clearErrors } from '../../actions/productActions'
+
+import { NEW_PRODUCT_RESET } from '../../constants/productConstants'
 
 const NewProduct = () => {
-
+    const dispatch = useDispatch();
+    const { loading, error, success } = useSelector(state => state.newProduct);
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('');
@@ -17,9 +23,9 @@ const NewProduct = () => {
     const [seller, setSeller] = useState('');
     const [images, setImages] = useState([]);
     const [imagesPreview, setImagesPreview] = useState([])
-    const [error, setError] = useState('')
-    const [loading, setLoading] = useState(true)
-    const [success, setSuccess] = useState('')
+    // const [error, setError] = useState('')
+    // const [loading, setLoading] = useState(true)
+    // const [success, setSuccess] = useState('')
     const [product, setProduct] = useState({})
 
     const categories = [
@@ -54,7 +60,7 @@ const NewProduct = () => {
             formData.append('images', image)
         })
         
-        newProduct(formData)
+        dispatch(newProduct(formData))
     }
 
     const onChange = e => {
@@ -75,43 +81,40 @@ const NewProduct = () => {
         })
        
     }
-    const newProduct = async (formData) => {
+    // const newProduct = async (formData) => {
        
-        try {
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`
-                }
-            }
+    //     try {
+    //         const config = {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': `Bearer ${getToken()}`
+    //             }
+    //         }
 
-            const { data } = await axios.post(`${import.meta.env.VITE_API}/admin/product/new`, formData, config)
-            setLoading(false)
-            setSuccess(data.success)
-            setProduct(data.product)
-        } catch (error) {
-            setError(error.response.data.message)
+    //         const { data } = await axios.post(`${import.meta.env.VITE_API}/admin/product/new`, formData, config)
+    //         setLoading(false)
+    //         setSuccess(data.success)
+    //         setProduct(data.product)
+    //     } catch (error) {
+    //         setError(error.response.data.message)
 
-        }
-    }
+    //     }
+    // }
     useEffect(() => {
 
         if (error) {
-            toast.error(error, {
-                position: 'bottom-right'
-            });
+            dispatch(clearErrors())
         }
 
         if (success) {
-            
             toast.success('Product created successfully', {
                 position: 'bottom-right'
             })
             navigate('/admin/products');
-
+            dispatch({ type: NEW_PRODUCT_RESET })
         }
 
-    }, [error, success,])
+    }, [error, success, dispatch, navigate,])
 
 
     return (
