@@ -11,18 +11,19 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux'
 
-import { getAdminProducts, clearErrors } from '../../actions/productActions'
+import { getAdminProducts, clearErrors, deleteProduct, } from '../../actions/productActions'
 
 const ProductsList = () => {
     const dispatch = useDispatch();
     const { loading, error, products } = useSelector(state => state.products);
+    const { error: deleteError, isDeleted } = useSelector(state => state.product)
     // const [products, setProducts] = useState([])
     // const [error, setError] = useState('')
-    const [deleteError, setDeleteError] = useState('')
+    // const [deleteError, setDeleteError] = useState('')
     const [users, setUsers] = useState([])
     const [orders, setOrders] = useState([])
     // const [loading, setLoading] = useState(true)
-    const [isDeleted, setIsDeleted] = useState(false)
+    // const [isDeleted, setIsDeleted] = useState(false)
 
     let navigate = useNavigate()
     // const getAdminProducts = async () => {
@@ -62,29 +63,29 @@ const ProductsList = () => {
             toast.success('Product deleted successfully', {
                 position: 'bottom-right'
             })
-            setIsDeleted(false)
+            // setIsDeleted(false)
             navigate('/admin/products');
 
         }
 
     }, [error, deleteError, isDeleted,])
 
-    const deleteProduct = async (id) => {
-        try {
-            const config = {
-                headers: {
-                    'Authorization': `Bearer ${getToken()}`
-                }
-            }
-            const { data } = await axios.delete(`${import.meta.env.VITE_API}/admin/product/${id}`, config)
+    // const deleteProduct = async (id) => {
+    //     try {
+    //         const config = {
+    //             headers: {
+    //                 'Authorization': `Bearer ${getToken()}`
+    //             }
+    //         }
+    //         const { data } = await axios.delete(`${import.meta.env.VITE_API}/admin/product/${id}`, config)
 
-            setIsDeleted(data.success)
-            setLoading(false)
-        } catch (error) {
-            setDeleteError(error.response.data.message)
+    //         setIsDeleted(data.success)
+    //         setLoading(false)
+    //     } catch (error) {
+    //         setDeleteError(error.response.data.message)
 
-        }
-    }
+    //     }
+    // }
 
 
 
@@ -140,7 +141,7 @@ const ProductsList = () => {
     }
 
     const deleteProductHandler = (id) => {
-        deleteProduct(id)
+        dispatch(deleteProduct(id))
     }
 
     return (
